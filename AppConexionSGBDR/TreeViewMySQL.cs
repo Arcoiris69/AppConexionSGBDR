@@ -42,22 +42,23 @@ namespace AppConexionSGBDR
                 MySql.Data.MySqlClient.MySqlCommand cmd2 = new MySql.Data.MySqlClient.MySqlCommand("SELECT table_name FROM information_schema.tables where table_schema = '" + database + "';", conn);
                 MySql.Data.MySqlClient.MySqlDataReader rdr2 = cmd2.ExecuteReader();
 
-                string[] vect = new string[rdr2.FieldCount];
+                //string[] vect = new string[];
+                List<string> vect = new List<string>();
                 while (rdr2.Read())
                 {
                     for (int i = 0; i < rdr2.FieldCount; i++)
                     {
                         string c = rdr2.GetName(i);
                         tvData.Nodes[0].Nodes.Add(rdr2[c].ToString());
-                        vect[i] = rdr2[c].ToString();
+                        vect.Add(rdr2[c].ToString());
                     }
                 }
                 rdr2.Close();
 
-                for (int x = 0; x < vect.GetLongLength(0); x++)
+                for (int x = 0; x < vect.Count; x++)
                 {
-                    MySql.Data.MySqlClient.MySqlCommand cmd3 = new MySql.Data.MySqlClient.MySqlCommand("SELECT COLUMN_NAME  FROM information_schema.columns where TABLE_NAME='" + vect[x] + "';", conn);
-                    MySql.Data.MySqlClient.MySqlDataReader rdr3 = cmd2.ExecuteReader();
+                    MySql.Data.MySqlClient.MySqlCommand cmd3 = new MySql.Data.MySqlClient.MySqlCommand("SELECT COLUMN_NAME  FROM information_schema.columns where TABLE_NAME='" + vect.ElementAt(x) + "';", conn);
+                    MySql.Data.MySqlClient.MySqlDataReader rdr3 = cmd3.ExecuteReader();
                     while (rdr3.Read())
                     {
                         for (int i = 0; i < rdr3.FieldCount; i++)
